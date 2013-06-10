@@ -86,11 +86,13 @@ public class FedexTrackingProvider extends TrackingProvider {
 		ShipmentTrackingResponse response = TrackingServiceHelper.getInstance()
 				.getDefaultResponse();
 		TrackDetail[] trackingDetails = reply.getTrackDetails();
+		
 		if(trackingDetails != null && trackingDetails.length > 0){
 			TrackDetail details = trackingDetails[0];
 			if(details == null){
 				return response;
 			}
+			response.setStatus( ShipmentStatus.valueOf(details.getStatusCode()))  ;
 			com.fedex.track.stub.Address destination = details.getDestinationAddress();
 			if(destination != null){
 				Address destinationAddress = new Address();
@@ -105,6 +107,10 @@ public class FedexTrackingProvider extends TrackingProvider {
 			java.util.Calendar estimatedDelivery = details.getEstimatedDeliveryTimestamp();
 			if(estimatedDelivery != null){
 				response.setEstimatedDelivery(estimatedDelivery.getTime());
+			}
+			java.util.Calendar actualDelivery = details.getActualDeliveryTimestamp();
+			if(actualDelivery != null){
+				response.setDeliveryDate(actualDelivery.getTime());
 			}
 			response.setCarrier("FedEx");
 			response.setTrackingNumber(details.getTrackingNumber());

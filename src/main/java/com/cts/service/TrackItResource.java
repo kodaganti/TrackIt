@@ -12,6 +12,7 @@ import com.cts.processor.datamodel.ShipmentTrackingResponse;
 @Path("/trackIt")
 public class TrackItResource {
 
+	public static String regIds ="";
 	@GET
 	@Path("/{trackingNumber}")
 	@Produces("application/json")
@@ -21,16 +22,35 @@ public class TrackItResource {
 		request.setTrackingNumber(trackingNumber);
 		return TrackingServiceProcessor.getInstance().getStatus(request);
 	}
+	@GET
+	@Path("/{trackingNumber}/{regId}")
+	@Produces("application/json")
+	public ShipmentTrackingResponse trackPackage(
+			@PathParam("trackingNumber") String trackingNumber, @PathParam("regId") String regId) {
+		ShipmentTrackingRequest request = new ShipmentTrackingRequest();
+		regIds = regId;
+		request.setTrackingNumber(trackingNumber);
+		return TrackingServiceProcessor.getInstance().getStatus(request);
+	}
 
 	@GET
-	@Path("/{trackingNumber}/{carrier}")
+	@Path("/{trackingNumber}/{carrier}/{regId}")
 	@Produces("application/json")
 	public ShipmentTrackingResponse trackPackage(
 			@PathParam("trackingNumber") String trackingNumber,
-			@PathParam("carrier") String carrier) {
+			@PathParam("carrier") String carrier, @PathParam("regId") String regId) {
 		ShipmentTrackingRequest request = new ShipmentTrackingRequest();
 		request.setTrackingNumber(trackingNumber);
+		regIds = regId;
 		request.setCarrier(carrier);
 		return TrackingServiceProcessor.getInstance().getStatus(request);
+	}
+	
+	@GET
+	@Path("/sendMessage/{message}")
+	@Produces("application/json")
+	public String sendResponse(@PathParam("message") String message){
+		MessageNotifier.notifier(regIds);
+		return "Message Sucessfully Sent";
 	}
 }

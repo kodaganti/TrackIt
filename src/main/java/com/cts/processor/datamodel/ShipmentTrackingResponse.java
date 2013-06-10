@@ -13,6 +13,7 @@ public class ShipmentTrackingResponse {
 	private ShipmentStatus status;
 	private List<TrackingEvent> trackingEvents;
 	private Date estimatedDelivery;
+	private Date deliveryDate;
 	private Address destinationAddress;
 	
 	public Address getDestinationAddress() {
@@ -62,4 +63,13 @@ public class ShipmentTrackingResponse {
 	public void setTrackingEvents(List<TrackingEvent> trackingEvents) {
 		this.trackingEvents = trackingEvents;
 	}
+
+	public Date getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(Date deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
+	
 }
